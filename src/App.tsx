@@ -1,45 +1,75 @@
 import React from 'react';
 
-import GameBoard from './GameBoard';
+import GameBoard, { BlankBoard, Board, Row } from './GameBoard';
 import Keyboard from './Keyboard';
 
 import './App.css';
 
+type State = {
+  word: string; //TODO: get this from a list of words
+  usedLetters: string[];
+  guessNumber: number;
+  cursorPosition: number;
+  board: Board;
+};
+
+type Action =
+  | { type: 'GUESS' }
+  | { type: 'BACK' }
+  | { type: 'TYPE'; key: string };
+
+function reducer(state: State, action: Action): State {
+  const boardCopy = { ...state.board };
+  switch (action.type) {
+    case 'GUESS':
+      return {
+        ...state,
+        guessNumber: state.guessNumber + 1,
+        cursorPosition: 0,
+      };
+    case 'BACK':
+      if (state.cursorPosition === 0) {
+        return state;
+      }
+      boardCopy[state.guessNumber as keyof Board].letters[
+        state.cursorPosition - 1
+      ] = '';
+      return {
+        ...state,
+        cursorPosition: state.cursorPosition - 1,
+        board: boardCopy,
+      };
+    case 'TYPE':
+      if (state.cursorPosition === 6) {
+        return state;
+      } else {
+        boardCopy[state.guessNumber as keyof Board].letters[
+          state.cursorPosition
+        ] = action.key;
+
+        return {
+          ...state,
+          cursorPosition: state.cursorPosition + 1,
+          board: boardCopy,
+        };
+      }
+  }
+}
+
 function App() {
-  const [board, setBoard] = React.useState(Array(6).fill(Array(6).fill('')));
-  const [guess, setGuess] = React.useState<number>(1);
-  const [position, setPosition] = React.useState<number>(1);
+  const [state, dispatch] = React.useReducer(reducer, {
+    word: 'LETTER',
+    usedLetters: Array(26),
+    guessNumber: 0,
+    cursorPosition: 0,
+    board: BlankBoard(),
+  });
 
-  const onKeypress = (key: string) => {
-    const boardCopy = [...board];
-    const rowCopy = [...boardCopy[guess - 1]];
+  const { word, usedLetters, guessNumber, cursorPosition, board } = state;
 
-    // If the key is a number, set the position to that number
-    if (key === 'OK') {
-      if(position !== 7){
-        //TODO: handle error
-        return;
-      }
-      // TODO: check if guess is correct
-      setGuess(guess + 1);
-      setPosition(1);
-    } else if (key === '<<') {
-      if (position === 1) {
-        return;
-      }
-      rowCopy[position - 2] = '';
-      boardCopy[guess - 1] = rowCopy;
-      setPosition(position - 1);
-    } else {
-      if (position === 7) {
-        return;
-      }
-      rowCopy[position - 1] = key;
-      boardCopy[guess - 1] = rowCopy;
-      setPosition(position + 1);
-    }
-    setBoard(boardCopy);
-  };
+  const onBackspace = () => dispatch({ type: 'BACK' });
+  const onOK = () => dispatch({ type: 'GUESS' });
+  const onKeypress = (key: string) => dispatch({ type: 'TYPE', key });
 
   return (
     <div className="App">
@@ -47,7 +77,7 @@ function App() {
         <h1>Wordz</h1>
       </header>
       <GameBoard board={board} />
-      <Keyboard onKeypress={onKeypress} />
+      <Keyboard onKeypress={onKeypress} onBackspace={onBackspace} onOK={onOK} />
     </div>
   );
 }

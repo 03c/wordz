@@ -4,9 +4,11 @@ import './Keyboard.css';
 
 interface FuncProps {
   onKeypress: (key: string) => void;
+  onBackspace: () => void;
+  onOK: () => void;
 }
 
-const Keyboard: React.FC<FuncProps> = ({ onKeypress }) => {
+const Keyboard: React.FC<FuncProps> = ({ onKeypress, onBackspace, onOK }) => {
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onKeypress(event.currentTarget.innerText);
   };
@@ -36,7 +38,7 @@ const Keyboard: React.FC<FuncProps> = ({ onKeypress }) => {
         <div onClick={handleClick}>L</div>
       </div>
       <div className="keyboard-row">
-        <div onClick={handleClick}>OK</div>
+        <div onClick={onOK}>OK</div>
         <div onClick={handleClick}>Z</div>
         <div onClick={handleClick}>X</div>
         <div onClick={handleClick}>C</div>
@@ -44,7 +46,7 @@ const Keyboard: React.FC<FuncProps> = ({ onKeypress }) => {
         <div onClick={handleClick}>B</div>
         <div onClick={handleClick}>N</div>
         <div onClick={handleClick}>M</div>
-        <div onClick={handleClick}>{'<<'}</div>
+        <div onClick={onBackspace}>{'<<'}</div>
       </div>
     </div>
   );
