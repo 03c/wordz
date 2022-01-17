@@ -2,50 +2,52 @@ import React from 'react';
 
 import './Keyboard.css';
 
-const Key: React.FC<{}> = ({ children }) => {
-  function onClick() {
-    console.log(children);
-  }
-  return <div onClick={onClick}>{children}</div>;
-};
+interface FuncProps {
+  onKeypress: (key: string) => void;
+}
 
-export default function Keyboard() {
+const Keyboard: React.FC<FuncProps> = ({ onKeypress }) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    onKeypress(event.currentTarget.innerText);
+  };
   return (
     <div className="keyboard-container">
       <div className="keyboard-row">
-      <Key>Q</Key>
-      <Key>W</Key>
-      <Key>E</Key>
-      <Key>R</Key>
-      <Key>T</Key>
-      <Key>Y</Key>
-      <Key>U</Key>
-      <Key>I</Key>
-      <Key>O</Key>
-      <Key>P</Key>
+        <div onClick={handleClick}>Q</div>
+        <div onClick={handleClick}>W</div>
+        <div onClick={handleClick}>E</div>
+        <div onClick={handleClick}>R</div>
+        <div onClick={handleClick}>T</div>
+        <div onClick={handleClick}>Y</div>
+        <div onClick={handleClick}>U</div>
+        <div onClick={handleClick}>I</div>
+        <div onClick={handleClick}>O</div>
+        <div onClick={handleClick}>P</div>
       </div>
       <div className="keyboard-row">
-      <Key>A</Key>
-      <Key>S</Key>
-      <Key>D</Key>
-      <Key>F</Key>
-      <Key>G</Key>
-      <Key>H</Key>
-      <Key>J</Key>
-      <Key>K</Key>
-      <Key>L</Key>
+        <div onClick={handleClick}>A</div>
+        <div onClick={handleClick}>S</div>
+        <div onClick={handleClick}>D</div>
+        <div onClick={handleClick}>F</div>
+        <div onClick={handleClick}>G</div>
+        <div onClick={handleClick}>H</div>
+        <div onClick={handleClick}>J</div>
+        <div onClick={handleClick}>K</div>
+        <div onClick={handleClick}>L</div>
       </div>
       <div className="keyboard-row">
-      <Key>OK</Key>
-      <Key>Z</Key>
-      <Key>X</Key>
-      <Key>C</Key>
-      <Key>V</Key>
-      <Key>B</Key>
-      <Key>N</Key>
-      <Key>M</Key>
-      <Key>{'<<'}</Key>
+        <div onClick={handleClick}>OK</div>
+        <div onClick={handleClick}>Z</div>
+        <div onClick={handleClick}>X</div>
+        <div onClick={handleClick}>C</div>
+        <div onClick={handleClick}>V</div>
+        <div onClick={handleClick}>B</div>
+        <div onClick={handleClick}>N</div>
+        <div onClick={handleClick}>M</div>
+        <div onClick={handleClick}>{'<<'}</div>
       </div>
     </div>
   );
-}
+};
+
+export default Keyboard;
