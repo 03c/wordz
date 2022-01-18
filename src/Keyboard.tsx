@@ -6,46 +6,95 @@ interface FuncProps {
   onKeypress: (key: string) => void;
   onBackspace: () => void;
   onOK: () => void;
+  word: string;
+  correctIndexLetters: number[];
+  correctIndexPositions: number[];
 }
 
-const Keyboard: React.FC<FuncProps> = ({ onKeypress, onBackspace, onOK }) => {
+const Keyboard: React.FC<FuncProps> = ({
+  onKeypress,
+  onBackspace,
+  onOK,
+  word,
+  correctIndexLetters,
+  correctIndexPositions,
+}) => {
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onKeypress(event.currentTarget.innerText);
   };
+
+  const correctLettersPosition = correctIndexPositions.map((index) => {
+    return word[index];
+  });
+  const correctLetters = correctIndexLetters.map((index) => {
+    return word[index];
+  });
+
+  const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map(
+    (letter) => {
+      return (
+        <div
+          className={
+            correctLettersPosition.includes(letter)
+              ? 'green'
+              : correctLetters.includes(letter)
+              ? 'yellow'
+              : ''
+          }
+          onClick={handleClick}
+          key={letter}
+        >
+          {letter}
+        </div>
+      );
+    }
+  );
+
+  const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map(
+    (letter) => {
+      return (
+        <div
+          className={
+            correctLettersPosition.includes(letter)
+              ? 'green'
+              : correctLetters.includes(letter)
+              ? 'yellow'
+              : ''
+          }
+          onClick={handleClick}
+          key={letter}
+        >
+          {letter}
+        </div>
+      );
+    }
+  );
+
+  const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((letter) => {
+    return (
+      <div
+        className={
+          correctLettersPosition.includes(letter)
+            ? 'green'
+            : correctLetters.includes(letter)
+            ? 'yellow'
+            : ''
+        }
+        onClick={handleClick}
+        key={letter}
+      >
+        {letter}
+      </div>
+    );
+  });
+
   return (
     <div className="keyboard-container">
-      <div className="keyboard-row">
-        <div onClick={handleClick}>Q</div>
-        <div onClick={handleClick}>W</div>
-        <div onClick={handleClick}>E</div>
-        <div onClick={handleClick}>R</div>
-        <div onClick={handleClick}>T</div>
-        <div onClick={handleClick}>Y</div>
-        <div onClick={handleClick}>U</div>
-        <div onClick={handleClick}>I</div>
-        <div onClick={handleClick}>O</div>
-        <div onClick={handleClick}>P</div>
-      </div>
-      <div className="keyboard-row">
-        <div onClick={handleClick}>A</div>
-        <div onClick={handleClick}>S</div>
-        <div onClick={handleClick}>D</div>
-        <div onClick={handleClick}>F</div>
-        <div onClick={handleClick}>G</div>
-        <div onClick={handleClick}>H</div>
-        <div onClick={handleClick}>J</div>
-        <div onClick={handleClick}>K</div>
-        <div onClick={handleClick}>L</div>
-      </div>
+      <div className="keyboard-row">{firstRow}</div>
+      <div className="keyboard-row">{secondRow}</div>
       <div className="keyboard-row">
         <div onClick={onOK}>OK</div>
-        <div onClick={handleClick}>Z</div>
-        <div onClick={handleClick}>X</div>
-        <div onClick={handleClick}>C</div>
-        <div onClick={handleClick}>V</div>
-        <div onClick={handleClick}>B</div>
-        <div onClick={handleClick}>N</div>
-        <div onClick={handleClick}>M</div>
+        {thirdRow}
         <div onClick={onBackspace}>{'<<'}</div>
       </div>
     </div>

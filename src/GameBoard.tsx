@@ -1,68 +1,54 @@
-import { type } from 'os';
 import React from 'react';
 
 import './GameBoard.css';
 
 type Row = {
   letters: string[];
-  correctPosition: number[];
-  correctLetter: number[];
-  checked: boolean;
-};
-
-type Board = {
-  0: Row;
-  1: Row;
-  2: Row;
-  3: Row;
-  4: Row;
-  5: Row;
+  correctIndexPositions: number[];
+  correctIndexLetters: number[];
 };
 
 interface FuncProps {
-  board: Board;
+  board: Array<Row>;
 }
 
-const BlankBoard = (): Board => {
-  return {
-    0: BlankRow(),
-    1: BlankRow(),
-    2: BlankRow(),
-    3: BlankRow(),
-    4: BlankRow(),
-    5: BlankRow(),
-  }
+const BlankBoard = (): Array<Row> => {
+  return new Array(6).fill(BlankRow());
 };
 
 const BlankRow = (): Row => {
   return {
     letters: Array(6).fill(''),
-    correctPosition: Array(6),
-    correctLetter: Array(6),
-    checked: false,
+    correctIndexPositions: Array(6),
+    correctIndexLetters: Array(6),
   };
 };
 
 const GameBoard: React.FC<FuncProps> = ({ board }) => {
-  const flatBoard: string[] = [
-    ...board[0].letters,
-    ...board[1].letters,
-    ...board[2].letters,
-    ...board[3].letters,
-    ...board[4].letters,
-    ...board[5].letters,
-  ];
-  const squares = flatBoard.map((square, index) => {
-    return <div key={index}>{square}</div>;
+  const row = board.map((row) => {
+    const letters = row.letters.map((letter, index) => {
+      let className = row.correctIndexPositions.includes(index)
+        ? 'green'
+        : row.correctIndexLetters.includes(index)
+        ? 'yellow'
+        : '';
+      return (
+        <div className={className} key={index}>
+          {letter}
+        </div>
+      );
+    });
+
+    return letters;
   });
 
   return (
     <div className="game-board">
-      <div className="grid-container">{squares}</div>
+      <div className="grid-container">{row}</div>
     </div>
   );
 };
 
 export default GameBoard;
-export { BlankBoard }
-export type { Board, Row };
+export { BlankBoard, BlankRow };
+export type { Row };
