@@ -58,6 +58,9 @@ function reducer(state: State, action: Action): State {
       //check correct position/letter
       let newCorrectPosition: number[] = [];
       let newCorrectLetters: number[] = [];
+
+      let newCorrectLettersGuess: number[] = [];
+
       for (let index = 0; index < 6; index++) {
         const guessLetter = boardRowCopy.letters[index];
         const wordLetter = state.word[index];
@@ -68,6 +71,8 @@ function reducer(state: State, action: Action): State {
             ...newCorrectLetters,
             state.word.indexOf(guessLetter),
           ];
+
+          newCorrectLettersGuess = [...newCorrectLettersGuess, index];
         }
       }
 
@@ -81,7 +86,7 @@ function reducer(state: State, action: Action): State {
         new Set([...state.correctIndexLetters, ...newCorrectLetters])
       );
 
-      boardRowCopy.correctIndexLetters = newCorrectLetters;
+      boardRowCopy.correctIndexLetters = newCorrectLettersGuess;
       boardRowCopy.correctIndexPositions = newCorrectPosition;
 
       boardCopy[state.guessNumber] = boardRowCopy;
