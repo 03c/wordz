@@ -8,7 +8,7 @@
 .keyboard-row {
   display: grid;
   grid-template-columns: repeat(10, auto);
-  grid-gap: 5px;
+  grid-gap: 1px;
   justify-content: center;
 }
 
@@ -16,10 +16,11 @@
   border: 2px solid rgb(99, 99, 99);
   color: white;
   font-size: 20px;
-  text-align: center;
 
   border-radius: 5px;
 
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
+
+  line-height: 34px;
 }
