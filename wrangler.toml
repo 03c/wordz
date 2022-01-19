@@ -1,9 +1,9 @@
 name = "wordz"
 type = "webpack"
-route = ''
-zone_id = ''
+route = 'wordz.hardcopy.dev/*'
+zone_id = '9fccc5b7fbac9d9f8294582a849c8801'
 usage_model = ''
 compatibility_flags = []
-workers_dev = true
+workers_dev = false
 site = {bucket = "./build",entry-point = "workers-site"}
 compatibility_date = "2022-01-19"
