@@ -9,6 +9,7 @@ interface FuncProps {
   word: string;
   correctIndexLetters: number[];
   correctIndexPositions: number[];
+  usedLetters: string[];
 }
 
 const Keyboard: React.FC<FuncProps> = ({
@@ -18,6 +19,7 @@ const Keyboard: React.FC<FuncProps> = ({
   word,
   correctIndexLetters,
   correctIndexPositions,
+  usedLetters,
 }) => {
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onKeypress(event.currentTarget.innerText);
