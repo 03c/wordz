@@ -41,6 +41,8 @@ const Keyboard: React.FC<FuncProps> = ({
               ? 'green'
               : correctLetters.includes(letter)
               ? 'yellow'
+              : usedLetters.includes(letter)
+              ? 'faded'
               : ''
           }
           onClick={handleClick}
@@ -61,6 +63,8 @@ const Keyboard: React.FC<FuncProps> = ({
               ? 'green'
               : correctLetters.includes(letter)
               ? 'yellow'
+              : usedLetters.includes(letter)
+              ? 'faded'
               : ''
           }
           onClick={handleClick}
@@ -80,6 +84,8 @@ const Keyboard: React.FC<FuncProps> = ({
             ? 'green'
             : correctLetters.includes(letter)
             ? 'yellow'
+            : usedLetters.includes(letter)
+            ? 'faded'
             : ''
         }
         onClick={handleClick}

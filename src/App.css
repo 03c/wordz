@@ -45,6 +45,6 @@
   background-color: #f9a825;
 }
 
-.grey {
-  background-color: #757575;
+.faded {
+  opacity: 0.3;
 }
