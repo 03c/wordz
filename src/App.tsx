@@ -4,11 +4,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import GameBoard, { BlankBoard, Row } from './GameBoard';
 import Keyboard from './Keyboard';
-
+import EndGame from './EndGame';
 import './App.css';
 
 type State = {
   word: string; //TODO: get this from a list of words
+  wordNumber: number;
   usedLetters: string[];
   correctIndexPositions: number[];
   correctIndexLetters: number[];
@@ -16,16 +17,21 @@ type State = {
   cursorPosition: number;
   board: Array<Row>;
   win: boolean;
+  lose: boolean;
+  gamesWon: number;
+  gamesLost: number;
 };
 
 type Action =
   | { type: 'GUESS' }
   | { type: 'BACK' }
   | { type: 'TYPE'; key: string }
-  | { type: 'CLEAR' };
+  | { type: 'NEW_WORD'; word: string }
+  | { type: 'NEXT_WORD' };
 
 const InitialState: State = {
-  word: 'LETTER',
+  word: '',
+  wordNumber: 0,
   usedLetters: [],
   correctIndexPositions: [],
   correctIndexLetters: [],
@@ -33,6 +39,9 @@ const InitialState: State = {
   cursorPosition: 0,
   board: BlankBoard(),
   win: false,
+  lose: false,
+  gamesWon: 0,
+  gamesLost: 0,
 };
 
 function reducer(state: State, action: Action): State {
@@ -55,7 +64,10 @@ function reducer(state: State, action: Action): State {
         if (guessLetter === wordLetter) {
           newCorrectPosition = [...newCorrectPosition, index];
         } else if (state.word.indexOf(guessLetter) !== -1) {
-          newCorrectLetters = [...newCorrectLetters, index];
+          newCorrectLetters = [
+            ...newCorrectLetters,
+            state.word.indexOf(guessLetter),
+          ];
         }
       }
 
@@ -83,6 +95,13 @@ function reducer(state: State, action: Action): State {
         cursorPosition: 0,
         board: boardCopy,
         win: newCorrectPosition.length === 6,
+        lose: state.guessNumber + 1 === 6 && newCorrectPosition.length !== 6,
+        gamesWon: state.gamesWon + (newCorrectPosition.length === 6 ? 1 : 0),
+        gamesLost:
+          state.gamesLost +
+          (state.guessNumber + 1 === 6 && newCorrectPosition.length !== 6
+            ? 1
+            : 0),
       };
     case 'BACK':
       lettersCopy[state.cursorPosition - 1] = '';
@@ -107,9 +126,17 @@ function reducer(state: State, action: Action): State {
         cursorPosition: state.cursorPosition + 1,
         board: boardCopy,
       };
-    case 'CLEAR':
+    case 'NEW_WORD':
+      return {
+        ...state,
+        word: action.word,
+      };
+    case 'NEXT_WORD':
       return {
         ...InitialState,
+        gamesWon: state.gamesWon,
+        gamesLost: state.gamesLost,
+        wordNumber: state.wordNumber + 1,
       };
   }
 }
@@ -127,18 +154,28 @@ function App() {
   }, [state]);
 
   React.useEffect(() => {
-    if (state.win) {
-      toast('You win!', {
-        type: 'success',
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
+    if (state.word === '') {
+      fetch('/words.txt')
+        .then((r) => r.text())
+        .then((text) => {
+          let lines = text.split('\n');
+          dispatch({ type: 'NEW_WORD', word: lines[state.wordNumber] });
+        });
     }
-  }, [state.win]);
+  }, [state.word, state.wordNumber]);
 
-  const { word, correctIndexLetters, correctIndexPositions, board } = state;
+  const {
+    word,
+    win,
+    lose,
+    gamesWon,
+    gamesLost,
+    correctIndexLetters,
+    correctIndexPositions,
+    board,
+  } = state;
 
+  const onNextWord = () => dispatch({ type: 'NEXT_WORD' });
   const onBackspace = () => {
     if (state.win) return;
     if (state.cursorPosition === 0) {
@@ -178,6 +215,14 @@ function App() {
         correctIndexLetters={correctIndexLetters}
         correctIndexPositions={correctIndexPositions}
         usedLetters={state.usedLetters}
+      />
+      <EndGame
+        word={word}
+        win={win}
+        lose={lose}
+        gamesWon={gamesWon}
+        gamesLost={gamesLost}
+        onNextWord={onNextWord}
       />
       <ToastContainer
         autoClose={2000}
