@@ -4,6 +4,7 @@ import './EndGame.css';
 
 interface FuncProps {
   word: string;
+  wordNumber: number;
   win: boolean;
   lose: boolean;
   gamesWon: number;
@@ -13,6 +14,7 @@ interface FuncProps {
 
 const EndGame: React.FC<FuncProps> = ({
   word,
+  wordNumber,
   win,
   lose,
   gamesWon,
@@ -22,7 +24,9 @@ const EndGame: React.FC<FuncProps> = ({
   if (!win && !lose) return null;
   return (
     <div className={win ? 'end-game win' : 'end-game lose'}>
-      <h1>You have {win ? 'won!' : 'lost!'}</h1>
+      <h1>
+        You {win ? 'won ' : 'lost'} Wordz #{wordNumber + 1}!
+      </h1>
       <h2>The word was: {word}</h2>
       <div>
         <h2>Game Stats</h2>

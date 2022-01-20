@@ -171,6 +171,7 @@ function App() {
 
   const {
     word,
+    wordNumber,
     win,
     lose,
     gamesWon,
@@ -209,7 +210,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Wordz</h1>
+        <h1>Wordz #{wordNumber + 1}</h1>
       </header>
       <GameBoard board={board} />
       <Keyboard
@@ -223,6 +224,7 @@ function App() {
       />
       <EndGame
         word={word}
+        wordNumber={wordNumber}
         win={win}
         lose={lose}
         gamesWon={gamesWon}
