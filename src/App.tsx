@@ -231,6 +231,11 @@ function App() {
         gamesLost={gamesLost}
         onNextWord={onNextWord}
       />
+      <footer className="App-footer">
+        <a href="https://hardcopy.dev" target="_blank" rel="noopener noreferrer">
+          hardcopy.dev
+        </a>
+      </footer>
       <ToastContainer
         autoClose={2000}
         closeOnClick
