@@ -1,0 +1,63 @@
+name: PR preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    # Fork PRs cannot use repository secrets; skip deploy (CI still visible as skipped).
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Isolated worker on *.workers.dev — no zone routes (unlike production wrangler.toml).
+      - name: Write preview Wrangler config
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          cat > wrangler.preview.toml <<EOF
+          name = "wordz-pr-${PR_NUMBER}"
+          main = "workers-site/index.js"
+          compatibility_date = "2022-01-19"
+          workers_dev = true
+
+          [site]
+          bucket = "./build"
+          EOF
+
+      - name: Deploy preview worker
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "3.114.17"
+          command: deploy --config wrangler.preview.toml
+
+      - name: Post preview URL on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: cloudflare-workers-preview
+          message: |
+            **Preview** (Cloudflare Workers): ${{ steps.deploy.outputs.deployment-url }}
+
+            Deployed from commit ${{ github.sha }}.
