@@ -232,9 +232,17 @@ function App() {
         onNextWord={onNextWord}
       />
       <footer className="App-footer">
-        <a href="https://hardcopy.dev" target="_blank" rel="noopener noreferrer">
-          hardcopy.dev
-        </a>
+        <p className="App-footer-inner">
+          <span className="App-footer-eyebrow">More from the blog</span>
+          <a
+            className="App-footer-link"
+            href="https://hardcopy.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            hardcopy.dev
+          </a>
+        </p>
       </footer>
       <ToastContainer
         autoClose={2000}
