@@ -2,6 +2,12 @@
   "name": "wordz",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://wordz.hardcopy.dev",
+  "author": "03c (https://hardcopy.dev)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/03c/wordz"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

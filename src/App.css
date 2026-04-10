@@ -10,12 +10,6 @@
   text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   display: flex;
   flex-direction: column;
@@ -25,8 +19,19 @@
   color: white;
 }
 
-.App-link {
+.App-footer {
+  padding: 8px 0;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.App-footer a {
   color: #61dafb;
+  text-decoration: none;
+}
+
+.App-footer a:hover {
+  text-decoration: underline;
 }
 
 .green {
