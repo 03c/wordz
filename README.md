@@ -29,6 +29,19 @@ The app runs at [http://localhost:3000](http://localhost:3000).
 | `npm start` | Start the dev server |
 | `npm test` | Run tests (Jest + React Testing Library) |
 | `npm run build` | Production build to `build/` |
+| `npm run deploy` | Cloudflare Workers deploy (`predeploy` runs `npm run build` first) |
+
+## Deploying to Cloudflare
+
+This repo uses [Workers Sites](https://developers.cloudflare.com/workers/platform/sites/) (`[site]` in `wrangler.toml`) to serve the CRA `build/` folder.
+
+**Do not use** `wrangler versions upload` for this project. Workers Sites does not support that flow; use **`wrangler deploy`** (no extra flags — it reads `wrangler.toml`, including `[site]`).
+
+```bash
+npm run deploy
+```
+
+`predeploy` runs `npm run build` automatically, then Wrangler uploads the worker and the `build/` bucket. Authenticate with [`wrangler login`](https://developers.cloudflare.com/workers/wrangler/install-and-update/) first.
 
 ## Tech Stack
 

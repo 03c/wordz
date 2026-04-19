@@ -1,3 +1,5 @@
+# Workers Sites: use plain `wrangler deploy` (defaults from this file; not `wrangler versions upload`).
+# See README — "Deploying to Cloudflare".
 name = "wordz"
 main = "workers-site/index.js"
 routes = [
